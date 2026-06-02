@@ -9,6 +9,10 @@ import numpy as np
 import faiss
 import hashlib
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv  # <-- 1. Add this import
+
+# 2. Automatically load hidden variables from the .env file
+load_dotenv()
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -19,8 +23,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# SECURITY NOTE: Move your API Key to an environment variable (.env) for production safety
-GOOGLE_API_KEY = "AIzaSyCHe2JIyg45XTYExLFvrr04y9O3y_IuoAY"  
+# 3. SECURE FIX: Safely retrieve the key dynamically out of local memory
+GOOGLE_API_KEY = os.environ.get("GEMINI_API_KEY")
+
+if not GOOGLE_API_KEY:
+    raise ValueError("System Error: GEMINI_API_KEY is missing from your .env file!")
+
+# INITIALIZE THE CLIENT
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
 GENERATIVE_MODEL_NAME = "gemini-2.5-flash"

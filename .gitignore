@@ -1,0 +1,15 @@
+# Ignore the hidden environment file
+.env
+
+# Ignore python caching folder
+__pycache__/
+
+# Ignore all local chunk files and FAISS indices
+*.json
+*.index
+
+# Ignore everything inside the uploads folder
+uploads/
+
+# Ignore the Python virtual environment
+venv/
